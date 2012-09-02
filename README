@@ -1,0 +1,17 @@
+European/Dutch weather (rain and lightning) radar.
+
+This small application will display the dutch weather radar data provided by
+buienradar.nl and meteox.nl. It offers a choice between 1, 2, 3, 6, 12 and 24
+hour loops loops can be paused and navigated as well.
+
+The application does not yet have a proper installer. To use it, clone from
+github and run from the checke out repository.
+
+git clone https://github.com/seveas/buienradar.git
+cd buienradar
+./buienradar
+
+(c)2009-2012 Dennis Kaarsemaker <dennis@kaarsemaker.net> This is free software,
+licensed under the GNU GPL, version 3 or later.
+
+Downloaded data is (c) buienradar.nl/meteox.nl, all rights reserved.

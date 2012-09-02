@@ -49,7 +49,8 @@ class BuienRadar(object):
         self.country = self.countries['eu']
         self.seconds = 3600
 
-    def create_gui(self):
+    def create_gui(self, show_gui):
+        self.show_gui = show_gui
         self.window = w = Gtk.Window(Gtk.WindowType.TOPLEVEL)
         w.set_title("Weather radar %s" % '.'.join(str(x) for x in __version__))
         w.connect("delete_event", self.quit)
@@ -119,7 +120,8 @@ class BuienRadar(object):
         vbox.pack_start(sb, False, False, 0)
 
         self.window.set_focus(None)
-        self.window.show_all()
+        if show_gui:
+            self.window.show_all()
 
     def main(self):
         """Show the gui and run the mainloop. Also start the player"""
@@ -240,6 +242,8 @@ class BuienRadar(object):
             self.last_step = self.steps
         else:
             self.last_step -= 1
+            if self.last_step == 0 and not self.show_gui:
+                sys.exit(0)
 
         self.radar.load_timestamp_image(self.country, self.cycle_time - datetime.timedelta(0, self.country['interval'] * self.last_step))
 
@@ -443,6 +447,8 @@ if __name__ == '__main__':
     parser = OptionParser()
     parser.add_option('-v', '--verbose', action='count', dest='verbosity',
                       help="Verbose output (use twice for higher verbosity)")
+    parser.add_option('--no-gui', action='store_false', dest='gui', default=True,
+                      help="Don't show a gui, just download images")
 
     for hour in br.hour_choices:
         if hour < 10:
@@ -464,7 +470,7 @@ if __name__ == '__main__':
     loglevel = {1: logging.INFO, 2: logging.DEBUG}.get(options.verbosity, logging.WARNING)
     br.logger.setLevel(loglevel)
 
-    br.create_gui()
+    br.create_gui(options.gui)
     br.set_seconds(options.seconds)
     br.set_country(country=br.countries[options.country])
     br.main()
